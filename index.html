@@ -829,11 +829,13 @@ function scorePalace(p, cat){
   const lines = [];
   let total = 0;
   let forcedBad = false;
+  let forcedReason = null;
+  const markForced = tag=>{ forcedBad = true; if(!forcedReason) forcedReason = tag; };
 
   // 第一層：時孤
   if(p.voidLevel === 1){
     lines.push({reason:`犯時孤（${p.dir}為本時辰空亡方位）：不論門星再吉，此方位不建議使用`, pts:-100});
-    total -= 100; forcedBad = true;
+    total -= 100; markForced("時孤");
   } else if(p.voidLevel === 0.5){
     lines.push({reason:`部分落入時孤邊界（東北偏北）：可信度打折，需謹慎看待`, pts:-20});
     total -= 20;
@@ -843,11 +845,11 @@ function scorePalace(p, cat){
   p.patterns.forEach(pt=>{
     if(pt === "三奇入墓"){
       lines.push({reason:"三奇入墓：訊息被壓制、對方可能隱瞞或談不透", pts:-50});
-      total -= 50; forcedBad = true;
+      total -= 50; markForced("入墓");
     }
     if(pt === "門迫"){
       lines.push({reason:"門迫：五行受剋，行動阻力大、事情推進困難", pts:-30});
-      total -= 30; forcedBad = true;
+      total -= 30; markForced("門迫");
     }
   });
 
@@ -856,7 +858,7 @@ function scorePalace(p, cat){
   if(jx){
     lines.push({reason:`六儀擊刑：天盤${p.tian[0]}落${p.name}宮成刑，${jx.relText}`, pts:jx.pts});
     total += jx.pts;
-    if(jx.forced) forcedBad = true;
+    if(jx.forced) markForced("犯刑");
   }
 
   // 馬星（主動主變，依問題類型給分）
@@ -872,8 +874,13 @@ function scorePalace(p, cat){
   if(ky){
     const [kname, kluck, kmean] = ky;
     if(kluck==="吉"){
-      const kpts = KEYING_TOP[p.tian[0]+p.di[0]] || 20;
-      lines.push({reason:`十干剋應「${kname}」吉格：${kmean}`, pts:kpts});
+      let kpts = KEYING_TOP[p.tian[0]+p.di[0]] || 20;
+      let kreason = `十干剋應「${kname}」吉格：${kmean}`;
+      if(jx || p.patterns.includes("門迫") || p.patterns.includes("三奇入墓")){
+        kpts = Math.round(kpts/2);
+        kreason += "（同宮逢刑／迫／墓，吉力減半）";
+      }
+      lines.push({reason:kreason, pts:kpts});
       total += kpts;
     } else if(kluck==="凶"){
       lines.push({reason:`十干剋應「${kname}」凶格：${kmean}`, pts:-20});
@@ -912,7 +919,7 @@ function scorePalace(p, cat){
   else if(total >= 10) grade = "可";
   else grade = "弱";
 
-  return {lines, total, grade};
+  return {lines, total, grade, forcedReason};
 }
 
 /* ---------------- 渲染 ---------------- */
@@ -963,7 +970,7 @@ function buildGrid(){
       <div class="star">${p.star}（${p.starStat}）</div>
       <div class="god">${p.god}</div>
       ${patternBits.length ? `<div class="patterns">${patternBits.join("、")}</div>` : ""}
-      <span class="badge grade-${result.grade}">${result.grade}　${result.total>0?"+":""}${result.total}</span>
+      <span class="badge grade-${result.grade}">${result.grade}${result.forcedReason?"·"+result.forcedReason:""}　${result.total>0?"+":""}${result.total}</span>
     `;
     cell.onclick = ()=>{ selectedPalace = num; render(); };
     gridEl.appendChild(cell);
@@ -985,7 +992,7 @@ function buildRank(){
     const row = document.createElement("div");
     row.className = "rank-item";
     row.innerHTML = `
-      <span class="rname"><span class="badge grade-${item.result.grade}" style="margin-right:8px;">${item.result.grade}</span>${item.p.name}宮（${item.p.dir}）</span>
+      <span class="rname"><span class="badge grade-${item.result.grade}" style="margin-right:8px;">${item.result.grade}${item.result.forcedReason?"·"+item.result.forcedReason:""}</span>${item.p.name}宮（${item.p.dir}）</span>
       <span class="rscore">${item.result.total>0?"+":""}${item.result.total}</span>
     `;
     row.onclick = ()=>{ selectedPalace = item.num; render(); };
@@ -1028,7 +1035,7 @@ function buildDetail(){
   const result = scorePalace(p, cat);
   detailEl.innerHTML = `
     <div class="detail-name">${p.name}宮 · ${p.dir}</div>
-    <div class="detail-grade"><span class="badge grade-${result.grade}">${result.grade}級</span></div>
+    <div class="detail-grade"><span class="badge grade-${result.grade}">${result.grade}級${result.forcedReason?`（${result.forcedReason}）`:""}</span></div>
     ${result.lines.map(l=>`
       <div class="score-line">
         <span class="reason">${l.reason}</span>
