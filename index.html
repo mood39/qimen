@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>奇門遁甲斷局盤 · 丙午年甲午月戊寅日戊午時</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12111c;
+    --bg-panel: #1b1930;
+    --bg-panel-raised: #221f3b;
+    --brass: #c8a24d;
+    --brass-dim: #8a763f;
+    --ivory: #e9e4d3;
+    --muted: #9691ac;
+    --jade: #6fa583;
+    --cinnabar: #bb4632;
+    --line: #35314f;
+    --shadow: rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 50% -10%, #241f3d 0%, var(--bg) 55%),
+      var(--bg);
+    color:var(--ivory);
+    font-family:'Noto Sans TC', sans-serif;
+    min-height:100vh;
+    padding:32px 18px 60px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;}
+
+  /* ---------- header ---------- */
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+  }
+  .title-block .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:.18em;
+    font-size:11px;
+    color:var(--brass);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Noto Serif TC', serif;
+    font-weight:900;
+    font-size:clamp(26px,4vw,38px);
+    margin:0;
+    letter-spacing:.02em;
+  }
+  .subtitle{color:var(--muted);font-size:13px;margin-top:6px;}
+  .meta-box{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    text-align:right;
+    line-height:1.8;
+  }
+  .meta-box b{color:var(--ivory);font-weight:500;}
+
+  /* ---------- mode switch & manual form ---------- */
+  .mode-switch{display:flex;gap:10px;margin-bottom:16px;}
+  .mode-btn{
+    font-size:13px;
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    color:var(--muted);
+    cursor:pointer;
+    background:var(--bg-panel);
+    transition:all .15s ease;
+  }
+  .mode-btn:hover{border-color:var(--brass-dim);color:var(--ivory);}
+  .mode-btn.active{background:var(--bg-panel-raised);color:var(--brass);border-color:var(--brass);}
+
+  .manual-panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .manual-hint{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--line);}
+  .manual-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+  .manual-row label{font-size:12.5px;color:var(--muted);min-width:220px;}
+  .manual-row input[type=text]{
+    flex:1;min-width:220px;
+    background:var(--bg-panel-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    color:var(--ivory);
+    font-size:12.5px;
+    padding:7px 10px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .manual-table{width:100%;border-collapse:collapse;margin:16px 0 14px;font-size:12px;}
+  .manual-table th{
+    text-align:left;color:var(--brass);font-weight:500;
+    padding:6px 6px;border-bottom:1px solid var(--brass-dim);
+    font-family:'Noto Serif TC',serif;white-space:nowrap;
+  }
+  .manual-table td{padding:5px 5px;border-bottom:1px solid var(--line);}
+  .manual-table input[type=text]{
+    width:44px;background:var(--bg-panel-raised);border:1px solid var(--line);
+    border-radius:3px;color:var(--ivory);padding:5px 4px;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+  }
+  .manual-table select{
+    background:var(--bg-panel-raised);border:1px solid var(--line);
+    border-radius:3px;color:var(--ivory);padding:5px 4px;font-size:12px;
+    max-width:80px;
+  }
+  .manual-table td.gname{color:var(--brass);font-weight:700;white-space:nowrap;font-family:'Noto Serif TC',serif;}
+  .manual-table input[type=checkbox]{width:16px;height:16px;cursor:pointer;}
+  .apply-btn{
+    font-family:'Noto Serif TC',serif;font-weight:700;font-size:14px;
+    background:linear-gradient(180deg,#d9b463,var(--brass));
+    color:#1c1830;border:none;border-radius:4px;
+    padding:10px 26px;cursor:pointer;
+    transition:transform .15s ease;
+  }
+  .apply-btn:hover{transform:translateY(-1px);}
+
+  /* ---------- tabs ---------- */
+  .tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:26px;
+    flex-wrap:wrap;
+  }
+  .tab{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:14px;
+    padding:10px 22px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:var(--bg-panel);
+    color:var(--muted);
+    cursor:pointer;
+    position:relative;
+    transition:all .2s ease;
+  }
+  .tab .sub{display:block;font-family:'Noto Sans TC',sans-serif;font-weight:400;font-size:10px;color:var(--brass-dim);margin-top:2px;letter-spacing:.05em;}
+  .tab:hover{border-color:var(--brass-dim);color:var(--ivory);}
+  .tab.active{
+    background:linear-gradient(180deg,#2a2547,var(--bg-panel-raised));
+    color:var(--brass);
+    border-color:var(--brass);
+    box-shadow:0 4px 14px var(--shadow);
+  }
+  .tab.active .sub{color:var(--brass-dim);}
+
+  /* ---------- layout ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    gap:28px;
+  }
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  /* ---------- compass grid ---------- */
+  .compass-frame{
+    position:relative;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:26px;
+  }
+  .void-banner{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    color:var(--cinnabar);
+    background:rgba(187,70,50,.08);
+    border:1px dashed rgba(187,70,50,.4);
+    border-radius:4px;
+    padding:8px 12px;
+    margin-bottom:18px;
+    letter-spacing:.03em;
+  }
+  .grid9{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(3,1fr);
+    gap:2px;
+    background:var(--line);
+    border:2px solid var(--brass-dim);
+    aspect-ratio:1/1;
+  }
+  .cell{
+    position:relative;
+    background:var(--bg-panel-raised);
+    padding:10px 10px 8px;
+    display:flex;
+    flex-direction:column;
+    cursor:pointer;
+    overflow:hidden;
+    transition:background .15s ease, transform .12s ease;
+    min-height:0;
+  }
+  .cell:hover{background:#2a2650;}
+  .cell.selected{background:#312a5c;box-shadow:inset 0 0 0 2px var(--brass);}
+  .cell.void::after{
+    content:"時孤";
+    position:absolute;
+    top:6px; right:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9.5px;
+    color:var(--cinnabar);
+    letter-spacing:.05em;
+    border:1px solid var(--cinnabar);
+    padding:1px 4px;
+    border-radius:2px;
+  }
+  .cell.void-partial::after{
+    content:"部分時孤";
+    position:absolute;
+    top:6px; right:8px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:9px;
+    color:#d99a68;
+    letter-spacing:.03em;
+    border:1px dashed #d99a68;
+    padding:1px 4px;
+    border-radius:2px;
+  }
+  .trigram-wm{
+    position:absolute;
+    right:-6px; bottom:-14px;
+    font-size:64px;
+    color:rgba(200,162,77,.08);
+    line-height:1;
+    pointer-events:none;
+    user-select:none;
+  }
+  .cell .dir{
+    font-family:'Noto Serif TC',serif;
+    font-weight:700;
+    font-size:13px;
+    color:var(--brass);
+    margin-bottom:6px;
+  }
+  .cell .ganline{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .cell .door{font-size:13px;font-weight:700;margin-bottom:2px;}
+  .cell .star{font-size:12px;color:var(--ivory);margin-bottom:2px;}
+  .cell .god{font-size:11.5px;margin-bottom:4px;}
+  .cell .patterns{font-size:10.5px;color:var(--cinnabar);margin-bottom:6px;line-height:1.4;}
+  .badge{
+    margin-top:auto;
+    align-self:flex-start;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    font-weight:700;
+    padding:2px 9px;
+    border-radius:20px;
+    letter-spacing:.04em;
+  }
+  .grade-優{background:rgba(111,165,131,.15);color:var(--jade);border:1px solid rgba(111,165,131,.4);}
+  .grade-可{background:rgba(200,162,77,.15);color:var(--brass);border:1px solid rgba(200,162,77,.4);}
+  .grade-弱{background:rgba(217,154,104,.14);color:#d99a68;border:1px solid rgba(217,154,104,.4);}
+  .grade-差{background:rgba(187,70,50,.15);color:var(--cinnabar);border:1px solid rgba(187,70,50,.4);}
+  .txt-吉{color:var(--jade);} .txt-凶{color:var(--cinnabar);} .txt-平{color:var(--muted);}
+
+  .center-cell{
+    background:radial-gradient(circle, #2c2750 0%, var(--bg-panel-raised) 70%);
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:default;
+  }
+  .center-cell:hover{background:radial-gradient(circle, #2c2750 0%, var(--bg-panel-raised) 70%);}
+  .center-cell .big{
+    font-family:'Noto Serif TC',serif;
+    font-size:30px;
+    color:var(--brass);
+    font-weight:900;
+  }
+  .center-cell .small{font-size:10.5px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- side panel ---------- */
+  .side{display:flex;flex-direction:column;gap:16px;}
+  .panel{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:18px 18px 16px;
+  }
+  .panel h2{
+    font-family:'Noto Serif TC',serif;
+    font-size:15px;
+    margin:0 0 12px;
+    color:var(--brass);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .panel h2::before{content:"";width:3px;height:14px;background:var(--brass);display:inline-block;}
+  .rank-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 4px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    font-size:13px;
+  }
+  .rank-item:last-child{border-bottom:none;}
+  .rank-item:hover{color:var(--brass);}
+  .rank-item .rname{font-weight:500;}
+  .rank-item .rscore{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+
+  .detail-empty{color:var(--muted);font-size:12.5px;line-height:1.7;}
+  .detail-name{font-family:'Noto Serif TC',serif;font-size:17px;color:var(--brass);margin-bottom:2px;}
+  .detail-grade{margin-bottom:12px;}
+  .score-line{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:12.5px;
+    padding:6px 0;
+    border-bottom:1px dotted var(--line);
+    line-height:1.5;
+  }
+  .score-line:last-of-type{border-bottom:none;}
+  .score-line .reason{color:var(--ivory);flex:1;}
+  .score-line .pts{font-family:'JetBrains Mono',monospace;flex-shrink:0;white-space:nowrap;}
+  .pts.pos{color:var(--jade);}
+  .pts.neg{color:var(--cinnabar);}
+  .total-line{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid var(--brass-dim);
+    display:flex;
+    justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:13.5px;
+  }
+
+  .legend{font-size:11px;color:var(--muted);line-height:1.9;}
+  .legend b{color:var(--ivory);font-weight:500;}
+
+  footer{
+    margin-top:32px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:11.5px;
+    color:var(--muted);
+    line-height:1.8;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-block">
+      <div class="eyebrow">QI MEN DUN JIA · 斷局試算</div>
+      <h1>奇門遁甲斷局盤</h1>
+      <div class="subtitle" id="chartSubtitle">陰遁六局 · 戊午時盤 — 依問題類型顯示各宮加減分依據，非精確吉凶百分比</div>
+    </div>
+    <div class="meta-box" id="chartMeta">
+      干支：<b>丙午年 甲午月 戊寅日 戊午時</b><br>
+      農曆：<b>2026年05月19日</b>　局數：<b>陰六局</b><br>
+      時孤：<b>北方／東北偏北</b>
+    </div>
+  </header>
+
+  <div class="mode-switch">
+    <div class="mode-btn active" id="modeAutoRotate">🔮 轉盤自動排盤</div>
+    <div class="mode-btn" id="modeAutoFly">🌀 飛盤自動排盤</div>
+    <div class="mode-btn" id="modeManual">✏️ 手動輸入盤</div>
+  </div>
+
+  <div class="manual-panel" id="autoPanel">
+    <div class="manual-hint" id="autoHint">採用「排宮轉盤法」，請把它當作一種可信、但非唯一標準答案的排盤結果。</div>
+    <div class="manual-row">
+      <label>日期時間（請輸入當地時間，預設視為 UTC+8）</label>
+      <input type="datetime-local" id="autoDateTime">
+    </div>
+    <button class="apply-btn" id="applyAuto">自動排盤 →</button>
+    <div id="autoResultNote" style="margin-top:14px;font-size:12px;color:var(--muted);line-height:1.8;"></div>
+  </div>
+
+  <div class="manual-panel" id="manualPanel" style="display:none;">
+    <div class="manual-hint">
+      這裡不做自動排盤（節氣／局數換算複雜，怕算錯反而誤導你）。請先用你信賴的奇門排盤軟體或萬年曆排出盤，再把九宮內容填進下表，按「套用此盤」後，右側的計分與建議會依你填入的資料重新計算。
+    </div>
+    <div class="manual-row">
+      <label>盤面標籤（自由填寫，例如「2026/7/4 午時」）</label>
+      <input type="text" id="manualLabel" placeholder="例：2026年7月4日 午11:00-13:00">
+    </div>
+    <div class="manual-row">
+      <label>干支（自由填寫）</label>
+      <input type="text" id="manualGanzhi" placeholder="例：丙午年甲午月己卯日戊午時">
+    </div>
+    <div class="manual-row">
+      <label>局數 / 陰陽遁（自由填寫）</label>
+      <input type="text" id="manualJu" placeholder="例：陰遁六局">
+    </div>
+    <table class="manual-table">
+      <thead>
+        <tr><th>宮位</th><th>天盤干</th><th>地盤干</th><th>八門</th><th>九星</th><th>星旺衰</th><th>八神</th><th>三奇入墓</th><th>門迫</th><th>有煞氣</th><th>時孤</th></tr>
+      </thead>
+      <tbody id="manualTbody"></tbody>
+    </table>
+    <button class="apply-btn" id="applyManual">套用此盤 →</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="layout">
+    <div class="compass-frame">
+      <div class="void-banner" id="voidBanner">⚠ 時孤方位計算中…</div>
+      <div class="grid9" id="grid9"></div>
+    </div>
+
+    <div class="side">
+      <div class="panel">
+        <h2 id="rank-title">方位建議排序</h2>
+        <div id="rankList"></div>
+      </div>
+      <div class="panel">
+        <h2>計分明細</h2>
+        <div id="detail"><div class="detail-empty">點選左側九宮格中的任一宮位，查看該宮在目前問題類型下的加減分明細與理由。</div></div>
+      </div>
+      <div class="panel">
+        <h2>圖例</h2>
+        <div class="legend">
+          <div><b>優</b>　第一層無否決項，第二層加分明顯</div>
+          <div><b>可</b>　第一層無否決項，加減互見</div>
+          <div><b>弱</b>　無否決項但扣分偏多，宜謹慎</div>
+          <div><b>差</b>　犯時孤／重大凶格／凶門，建議避開</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    本頁計分邏輯為簡化示範架構（門／星旺衰／神／格局／時孤 五個面向加減分後分級），用於呈現傳統斷局的判斷「方向」與「權重層級」，並非公認、可精確量化的百分比公式，不同流派對權重拿捏也會有出入。請勿作為唯一決策依據。
+  </footer>
+
+</div>
+
+<script>
+/* ---------------- 固定不變的宮位基礎資訊（方位、卦象） ---------------- */
+const palaceMeta = {
+  4:{name:"巽",dir:"東南",trigram:"☴"},
+  9:{name:"離",dir:"南方",trigram:"☲"},
+  2:{name:"坤",dir:"西南",trigram:"☷"},
+  3:{name:"震",dir:"東方",trigram:"☳"},
+  7:{name:"兌",dir:"西方",trigram:"☱"},
+  8:{name:"艮",dir:"東北",trigram:"☶"},
+  1:{name:"坎",dir:"北方",trigram:"☵"},
+  6:{name:"乾",dir:"西北",trigram:"☰"},
+};
+const doorOptions = ["休門","生門","傷門","杜門","景門","死門","驚門","開門"];
+const starOptions = ["天蓬","天芮","天沖","天輔","天禽","天心","天柱","天任","天英"];
+const starStatOptions = ["旺","相","平","休","囚","死"];
+const godOptions = ["值符","螣蛇","太陰","六合","勾陳","朱雀","九地","九天"];
+
+/* ---------------- 資料：本盤九宮（範例盤，可被手動輸入覆蓋） ---------------- */
+const examplePalaces = {
+  4:{name:"巽",dir:"東南",trigram:"☴", tian:"丁",di:"庚", door:"景門",doorLuck:"平",
+     star:"天英",starStat:"旺", god:"勾陳", sha:[], patterns:[], voidLevel:0},
+  9:{name:"離",dir:"南方",trigram:"☲", tian:"壬",di:"丁", door:"死門",doorLuck:"凶",
+     star:"天芮",starStat:"相", god:"六合", sha:[], patterns:[], voidLevel:0},
+  2:{name:"坤",dir:"西南",trigram:"☷", tian:"乙",di:"壬", door:"驚門",doorLuck:"凶",
+     star:"天柱",starStat:"死", god:"太陰", sha:[], patterns:["三奇入墓"], voidLevel:0},
+  3:{name:"震",dir:"東方",trigram:"☳", tian:"庚",di:"辛", door:"杜門",doorLuck:"凶",
+     star:"天輔",starStat:"休", god:"朱雀", sha:[], patterns:[], voidLevel:0},
+  7:{name:"兌",dir:"西方",trigram:"☱", tian:"戊",di:"乙", door:"開門",doorLuck:"吉",
+     star:"天心",starStat:"死", god:"螣蛇", sha:[], patterns:[], voidLevel:0},
+  8:{name:"艮",dir:"東北",trigram:"☶", tian:"辛",di:"丙", door:"傷門",doorLuck:"凶",
+     star:"天沖",starStat:"休", god:"九地", sha:[], patterns:["門迫"], voidLevel:0.5},
+  1:{name:"坎",dir:"北方",trigram:"☵", tian:"丙",di:"甲", door:"生門",doorLuck:"吉",
+     star:"天任",starStat:"相", god:"九天", sha:[], patterns:["門迫"], voidLevel:1},
+  6:{name:"乾",dir:"西北",trigram:"☰", tian:"甲",di:"戊", door:"休門",doorLuck:"吉",
+     star:"天蓬",starStat:"囚", god:"直符", sha:["暗箭煞"], patterns:[], voidLevel:0},
+};
+examplePalaces[4].sha = ["五黃煞"];
+
+const starStatScore = {"旺":15,"相":10,"平":0,"休":-5,"囚":-10,"死":-15};
+
+/* currentPalaces 是畫面實際使用的資料狀態，預設載入範例盤 */
+let palaces = JSON.parse(JSON.stringify(examplePalaces));
+let centerInfo = {big:"—", small:"中宮"};
+
+function buildManualTable(){
+  const tbody = document.getElementById("manualTbody");
+  tbody.innerHTML = "";
+  Object.entries(palaceMeta).forEach(([numStr, meta])=>{
+    const num = Number(numStr);
+    const p = palaces[num];
+    const tr = document.createElement("tr");
+    tr.dataset.num = num;
+    tr.innerHTML = `
+      <td class="gname">${meta.name}<br><span style="font-weight:400;color:var(--muted);font-size:10px;">${meta.dir}</span></td>
+      <td><input type="text" class="f-tian" value="${p.tian}"></td>
+      <td><input type="text" class="f-di" value="${p.di}"></td>
+      <td><select class="f-door">${doorOptions.map(d=>`<option ${d===p.door?"selected":""}>${d}</option>`).join("")}</select></td>
+      <td><select class="f-star">${starOptions.map(s=>`<option ${s===p.star?"selected":""}>${s}</option>`).join("")}</select></td>
+      <td><select class="f-starstat">${starStatOptions.map(s=>`<option ${s===p.starStat?"selected":""}>${s}</option>`).join("")}</select></td>
+      <td><select class="f-god">${godOptions.map(g=>`<option ${g===p.god?"selected":""}>${g}</option>`).join("")}</select></td>
+      <td><input type="checkbox" class="f-rumu" ${p.patterns.includes("三奇入墓")?"checked":""}></td>
+      <td><input type="checkbox" class="f-menpo" ${p.patterns.includes("門迫")?"checked":""}></td>
+      <td><input type="checkbox" class="f-sha" ${p.sha.length?"checked":""}></td>
+      <td>
+        <select class="f-void">
+          <option value="0" ${p.voidLevel===0?"selected":""}>無</option>
+          <option value="0.5" ${p.voidLevel===0.5?"selected":""}>部分</option>
+          <option value="1" ${p.voidLevel===1?"selected":""}>全</option>
+        </select>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function applyManualForm(){
+  const newPalaces = {};
+  document.querySelectorAll("#manualTbody tr").forEach(tr=>{
+    const num = Number(tr.dataset.num);
+    const meta = palaceMeta[num];
+    const patterns = [];
+    if(tr.querySelector(".f-rumu").checked) patterns.push("三奇入墓");
+    if(tr.querySelector(".f-menpo").checked) patterns.push("門迫");
+    const sha = tr.querySelector(".f-sha").checked ? ["煞氣"] : [];
+    newPalaces[num] = {
+      name: meta.name, dir: meta.dir, trigram: meta.trigram,
+      tian: tr.querySelector(".f-tian").value || "?",
+      di: tr.querySelector(".f-di").value || "?",
+      door: tr.querySelector(".f-door").value,
+      doorLuck: ["開門","生門","休門"].includes(tr.querySelector(".f-door").value) ? "吉"
+                : tr.querySelector(".f-door").value === "景門" ? "平" : "凶",
+      star: tr.querySelector(".f-star").value,
+      starStat: tr.querySelector(".f-starstat").value,
+      god: tr.querySelector(".f-god").value,
+      sha, patterns,
+      voidLevel: Number(tr.querySelector(".f-void").value),
+    };
+  });
+  palaces = newPalaces;
+  centerInfo = {big:"—", small:"中宮不計分，僅供排盤展示"};
+
+  const label = document.getElementById("manualLabel").value || "自訂盤";
+  const ganzhi = document.getElementById("manualGanzhi").value || "（未填寫干支）";
+  const ju = document.getElementById("manualJu").value || "（未填寫局數）";
+  document.getElementById("chartSubtitle").textContent = `${label} — 手動輸入盤，依問題類型顯示各宮加減分依據`;
+  document.getElementById("chartMeta").innerHTML = `干支：<b>${ganzhi}</b><br>局數：<b>${ju}</b>`;
+  document.getElementById("voidBanner").innerHTML =
+    `⚠ 手動輸入盤：時孤依你在表格勾選的「時孤」欄位為準，落入時孤的方位在任何問題類型下都直接降級。`;
+
+  selectedPalace = null;
+  render();
+}
+
+/* ---------------- 四種問題類型的權重設定 ---------------- */
+const categories = {
+  travel:{
+    label:"出行搬遷", sub:"TRAVEL",
+    doorScore:{"開門":30,"生門":30,"休門":30,"景門":5,"死門":-30,"驚門":-30,"杜門":-30,"傷門":-30},
+    godScore:{"六合":10,"太陰":10,"九天":10,"值符":10,"九地":5,"勾陳":-10,"朱雀":-10,"螣蛇":-15},
+    note:"出行、搬遷同看休生開三吉門（第一層），時孤與重大凶格直接否決；星神旺衰只作第二層加減，不推翻第一層結論。"
+  },
+  negotiation:{
+    label:"談判合作", sub:"NEGOTIATION",
+    doorScore:{"景門":30,"開門":15,"休門":10,"生門":10,"死門":-25,"驚門":-20,"杜門":-20,"傷門":-15},
+    godScore:{"六合":20,"值符":15,"太陰":5,"九天":5,"九地":0,"勾陳":-15,"朱雀":-15,"螣蛇":-10},
+    note:"談判重視「景門」(文書契約)與「六合」(和合中介)，值符代表主導力；勾陳、朱雀主拖延與口舌是非，扣分較重。"
+  },
+  find:{
+    label:"尋人尋物", sub:"FIND",
+    doorScore:{"生門":35,"開門":10,"休門":15,"景門":5,"死門":-15,"驚門":-15,"杜門":-10,"傷門":-15},
+    godScore:{"值符":15,"太陰":15,"九地":10,"六合":5,"九天":5,"勾陳":-5,"朱雀":-10,"螣蛇":-10},
+    note:"尋人尋物以「生門」(有蹤跡)與「值符」(關鍵線索)為主；太陰、九地主隱蔽潛伏，是判斷「找得到但要花心思」的重要參考。"
+  },
+  wealth:{
+    label:"財運投資", sub:"WEALTH",
+    doorScore:{"生門":25,"開門":20,"休門":10,"景門":10,"死門":-20,"驚門":-15,"杜門":-15,"傷門":-10},
+    godScore:{"六合":15,"值符":10,"九天":5,"太陰":5,"九地":0,"勾陳":-10,"朱雀":-10,"螣蛇":-10},
+    note:"財運看「生門、開門」主財氣流動，「六合」主人脈合作帶來的財；星的旺相衰死影響財氣是否穩固持久。"
+  },
+  marriage:{
+    label:"婚姻感情", sub:"MARRIAGE",
+    doorScore:{"休門":20,"生門":15,"開門":10,"景門":10,"死門":-25,"驚門":-20,"杜門":-15,"傷門":-20},
+    godScore:{"六合":25,"太陰":10,"值符":10,"九地":5,"九天":0,"勾陳":-15,"朱雀":-15,"螣蛇":-15},
+    note:"感情首重「六合」(姻緣和合之神)，休門主安穩、景門主喜慶；朱雀主口角、螣蛇主猜疑糾纏、勾陳主拖泥帶水，皆是感情大忌。"
+  },
+  exam:{
+    label:"考試求職", sub:"EXAM / JOB",
+    doorScore:{"景門":30,"開門":25,"休門":10,"生門":10,"死門":-20,"驚門":-20,"杜門":-15,"傷門":-15},
+    godScore:{"值符":15,"九天":15,"太陰":10,"六合":5,"九地":-5,"勾陳":-10,"朱雀":-5,"螣蛇":-10},
+    note:"考試看「景門」(文書考場)，求職見貴看「開門」；九天主高升揚名，值符主貴人提攜；九地主沉伏，對求上進之事略減分。"
+  },
+  lawsuit:{
+    label:"訴訟官司", sub:"LAWSUIT",
+    doorScore:{"開門":20,"休門":15,"景門":5,"生門":10,"死門":-20,"驚門":-25,"杜門":-10,"傷門":-20},
+    godScore:{"值符":15,"六合":15,"太陰":5,"九地":5,"九天":0,"勾陳":-20,"朱雀":-20,"螣蛇":-10},
+    note:"官司看「開門」(見官順利)與「六合」(和解可能)；驚門主驚恐官非、勾陳主牽連拖延、朱雀主口舌文書是非，此三者扣分最重。"
+  },
+  illness:{
+    label:"疾病健康", sub:"HEALTH",
+    doorScore:{"生門":30,"休門":20,"開門":10,"景門":0,"死門":-30,"驚門":-15,"杜門":-10,"傷門":-20},
+    godScore:{"六合":10,"值符":10,"太陰":5,"九天":5,"九地":-5,"勾陳":-10,"朱雀":-5,"螣蛇":-15},
+    note:"問病首重「生門」(生機)與「休門」(休養)，死門、傷門大忌；螣蛇主纏綿怪症、九地主病深沉伏。傳統另以天芮為病星，天芮所落之宮亦可參看病情性質。"
+  }
+};
+
+/* ---------------- 計分邏輯（可攤開檢視每一分怎麼來） ---------------- */
+function scorePalace(p, cat){
+  const lines = [];
+  let total = 0;
+  let forcedBad = false;
+
+  // 第一層：時孤
+  if(p.voidLevel === 1){
+    lines.push({reason:`犯時孤（${p.dir}為本時辰空亡方位）：不論門星再吉，此方位不建議使用`, pts:-100});
+    total -= 100; forcedBad = true;
+  } else if(p.voidLevel === 0.5){
+    lines.push({reason:`部分落入時孤邊界（東北偏北）：可信度打折，需謹慎看待`, pts:-20});
+    total -= 20;
+  }
+
+  // 第一層：重大格局
+  p.patterns.forEach(pt=>{
+    if(pt === "三奇入墓"){
+      lines.push({reason:"三奇入墓：訊息被壓制、對方可能隱瞞或談不透", pts:-50});
+      total -= 50; forcedBad = true;
+    }
+    if(pt === "門迫"){
+      lines.push({reason:"門迫：五行受剋，行動阻力大、事情推進困難", pts:-30});
+      total -= 30; forcedBad = true;
+    }
+  });
+
+  // 第二層：門
+  const doorPts = cat.doorScore[p.door] ?? 0;
+  lines.push({reason:`${p.door}（${p.doorLuck}）在此問題類型下的門值`, pts:doorPts});
+  total += doorPts;
+
+  // 第二層：星旺衰
+  const starPts = starStatScore[p.starStat] ?? 0;
+  lines.push({reason:`${p.star}星處於「${p.starStat}」，反映此方位能量強弱`, pts:starPts});
+  total += starPts;
+
+  // 第二層：神
+  const godPts = cat.godScore[p.god] ?? 0;
+  lines.push({reason:`${p.god}臨宮，代表的性質對此類問題的影響`, pts:godPts});
+  total += godPts;
+
+  // 第二層：煞
+  p.sha.forEach(s=>{
+    lines.push({reason:`${s}：提醒需留意的潛在風險，非直接否決`, pts:-10});
+    total -= 10;
+  });
+
+  let grade;
+  if(forcedBad || total <= -40) grade = "差";
+  else if(total >= 40) grade = "優";
+  else if(total >= 10) grade = "可";
+  else grade = "弱";
+
+  return {lines, total, grade};
+}
+
+/* ---------------- 渲染 ---------------- */
+const gridOrder = [4,9,2, 3,5,7, 8,1,6]; // 洛書視覺排列，5為中宮
+let currentCat = "travel";
+let selectedPalace = null;
+
+function buildTabs(){
+  const tabsEl = document.getElementById("tabs");
+  tabsEl.innerHTML = "";
+  Object.entries(categories).forEach(([key,c])=>{
+    const el = document.createElement("div");
+    el.className = "tab" + (key===currentCat ? " active" : "");
+    el.innerHTML = `${c.label}<span class="sub">${c.sub}</span>`;
+    el.onclick = ()=>{ currentCat = key; selectedPalace=null; render(); };
+    tabsEl.appendChild(el);
+  });
+}
+
+function buildGrid(){
+  const gridEl = document.getElementById("grid9");
+  gridEl.innerHTML = "";
+  const cat = categories[currentCat];
+
+  gridOrder.forEach(num=>{
+    const cell = document.createElement("div");
+    if(num === 5){
+      cell.className = "cell center-cell";
+      cell.innerHTML = `<div class="big">${centerInfo.big}</div><div class="small">${centerInfo.small}</div>`;
+      gridEl.appendChild(cell);
+      return;
+    }
+    const p = palaces[num];
+    const result = scorePalace(p, cat);
+    cell.className = "cell" + (num===selectedPalace ? " selected":"") +
+      (p.voidLevel===1 ? " void" : p.voidLevel===0.5 ? " void-partial" : "");
+    cell.innerHTML = `
+      <div class="trigram-wm">${p.trigram}</div>
+      <div class="dir">${p.name} · ${p.dir}</div>
+      <div class="ganline">天${p.tian} ／ 地${p.di}</div>
+      <div class="door txt-${p.doorLuck}">${p.door}</div>
+      <div class="star">${p.star}（${p.starStat}）</div>
+      <div class="god">${p.god}</div>
+      ${(p.patterns.length||p.sha.length) ? `<div class="patterns">${[...p.patterns,...p.sha].join("、")}</div>` : ""}
+      <span class="badge grade-${result.grade}">${result.grade}　${result.total>0?"+":""}${result.total}</span>
+    `;
+    cell.onclick = ()=>{ selectedPalace = num; render(); };
+    gridEl.appendChild(cell);
+  });
+}
+
+function buildRank(){
+  document.getElementById("rank-title").textContent = `${categories[currentCat].label} · 方位建議排序`;
+  const list = Object.keys(palaces).map(numStr=>{
+    const num = Number(numStr);
+    const p = palaces[num];
+    const result = scorePalace(p, categories[currentCat]);
+    return {num, p, result};
+  }).sort((a,b)=>b.result.total - a.result.total);
+
+  const rankEl = document.getElementById("rankList");
+  rankEl.innerHTML = "";
+  list.forEach(item=>{
+    const row = document.createElement("div");
+    row.className = "rank-item";
+    row.innerHTML = `
+      <span class="rname"><span class="badge grade-${item.result.grade}" style="margin-right:8px;">${item.result.grade}</span>${item.p.name}宮（${item.p.dir}）</span>
+      <span class="rscore">${item.result.total>0?"+":""}${item.result.total}</span>
+    `;
+    row.onclick = ()=>{ selectedPalace = item.num; render(); };
+    rankEl.appendChild(row);
+  });
+
+  const noteEl = document.createElement("div");
+  noteEl.style.cssText = "margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7;";
+  noteEl.textContent = categories[currentCat].note;
+  rankEl.appendChild(noteEl);
+}
+
+function buildDetail(){
+  const detailEl = document.getElementById("detail");
+  if(selectedPalace === null){
+    detailEl.innerHTML = `<div class="detail-empty">點選左側九宮格中的任一宮位，查看該宮在目前問題類型下的加減分明細與理由。</div>`;
+    return;
+  }
+  const p = palaces[selectedPalace];
+  const cat = categories[currentCat];
+  const result = scorePalace(p, cat);
+  detailEl.innerHTML = `
+    <div class="detail-name">${p.name}宮 · ${p.dir}</div>
+    <div class="detail-grade"><span class="badge grade-${result.grade}">${result.grade}級</span></div>
+    ${result.lines.map(l=>`
+      <div class="score-line">
+        <span class="reason">${l.reason}</span>
+        <span class="pts ${l.pts>=0?'pos':'neg'}">${l.pts>0?'+':''}${l.pts}</span>
+      </div>
+    `).join("")}
+    <div class="total-line"><span>總分</span><span class="${result.total>=0?'pos':'neg'}" style="color:${result.total>=0?'var(--jade)':'var(--cinnabar)'}">${result.total>0?'+':''}${result.total}</span></div>
+  `;
+}
+
+/* ================= 自動排盤引擎 ================= */
+const TIANGAN = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const DIZHI2  = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+
+const TERMS_ST_ORDER = ["小寒","大寒","立春","雨水","惊蛰","春分","清明","谷雨","立夏","小满","芒种","夏至","小暑","大暑","立秋","处暑","白露","秋分","寒露","霜降","立冬","小雪","大雪","冬至"];
+const sTermInfo = [0,21208,42467,63836,85337,107014,128867,150921,173149,195551,218072,240693,263343,285989,308563,331033,353350,375494,397447,419210,440795,462224,483532,504758];
+function termDateUTC(year, idx){
+  const ms = 31556925974.7*(year-1900) + sTermInfo[idx]*60000 + Date.UTC(1900,0,6,2,5);
+  return new Date(ms);
+}
+const JU_TABLE = {
+  "小寒":{yang:true, ju:[2,8,5]}, "大寒":{yang:true, ju:[3,9,6]}, "立春":{yang:true, ju:[8,5,2]},
+  "雨水":{yang:true, ju:[9,6,3]}, "惊蛰":{yang:true, ju:[1,7,4]}, "春分":{yang:true, ju:[3,9,6]},
+  "清明":{yang:true, ju:[4,1,7]}, "谷雨":{yang:true, ju:[5,2,8]}, "立夏":{yang:true, ju:[4,1,7]},
+  "小满":{yang:true, ju:[5,2,8]}, "芒种":{yang:true, ju:[6,3,9]}, "夏至":{yang:false,ju:[9,3,6]},
+  "小暑":{yang:false,ju:[8,2,5]}, "大暑":{yang:false,ju:[7,1,4]}, "立秋":{yang:false,ju:[2,5,8]},
+  "处暑":{yang:false,ju:[1,4,7]}, "白露":{yang:false,ju:[9,3,6]}, "秋分":{yang:false,ju:[7,1,4]},
+  "寒露":{yang:false,ju:[6,9,3]}, "霜降":{yang:false,ju:[5,8,2]}, "立冬":{yang:false,ju:[6,9,3]},
+  "小雪":{yang:false,ju:[5,8,2]}, "大雪":{yang:false,ju:[4,7,1]}, "冬至":{yang:true, ju:[1,7,4]},
+};
+function findEnclosingTerm(inputMs){
+  const y = new Date(inputMs).getUTCFullYear();
+  const all=[];
+  for(const yy of [y-1,y,y+1]) for(let i=0;i<24;i++) all.push({name:TERMS_ST_ORDER[i], ms:termDateUTC(yy,i).getTime()});
+  all.sort((a,b)=>a.ms-b.ms);
+  let node=all[0];
+  for(const t of all){ if(t.ms<=inputMs) node=t; else break; }
+  return node;
+}
+function daysBetweenUTCDates(y1,m1,d1,y2,m2,d2){ return Math.round((Date.UTC(y2,m2-1,d2)-Date.UTC(y1,m1-1,d1))/86400000); }
+function dayGanZhiIndex(y,m,d){ const diff=daysBetweenUTCDates(1900,1,1,y,m,d); return ((diff+10)%60+60)%60; }
+function hourZhiIdxOf(hour){ return Math.floor(((hour+1)%24)/2); }
+function hourGanIdxOf(dayGanIdx, zhiIdx){ return ((dayGanIdx%5)*2 + zhiIdx)%10; }
+
+const JIE_NAMES = ["立春","惊蛰","清明","立夏","芒种","小暑","立秋","白露","寒露","立冬","大雪","小寒"];
+const MONTH_ZHI  = ["寅","卯","辰","巳","午","未","申","酉","戌","亥","子","丑"];
+function findYearMonthPillars(inputMs){
+  const y = new Date(inputMs).getUTCFullYear();
+  const lichun = termDateUTC(y, TERMS_ST_ORDER.indexOf("立春")).getTime();
+  const ganzhiYear = (inputMs>=lichun) ? y : y-1;
+  const yIdx = ((ganzhiYear-1984)%60+60)%60;
+  const yearGan=TIANGAN[yIdx%10], yearZhi=DIZHI2[yIdx%12];
+  const all=[];
+  for(const yy of [y-1,y,y+1]) for(const jn of JIE_NAMES) all.push({name:jn, ms:termDateUTC(yy,TERMS_ST_ORDER.indexOf(jn)).getTime()});
+  all.sort((a,b)=>a.ms-b.ms);
+  let node=all[0];
+  for(const t of all){ if(t.ms<=inputMs) node=t; else break; }
+  const steps = JIE_NAMES.indexOf(node.name);
+  const monthZhi = MONTH_ZHI[steps];
+  const group = TIANGAN.indexOf(yearGan)%5;
+  const monthGanIdx = ((group*2+2)+steps)%10;
+  return {yearGan,yearZhi,monthGan:TIANGAN[monthGanIdx],monthZhi};
+}
+
+const YANG_ORDER2=[1,2,3,4,5,6,7,8,9], YIN_ORDER2=[9,8,7,6,5,4,3,2,1];
+const LIUYI2=["戊","己","庚","辛","壬","癸","丁","丙","乙"];
+const STAR_FIXED2={1:"天蓬",2:"天芮",3:"天沖",4:"天輔",6:"天心",7:"天柱",8:"天任",9:"天英"};
+const STAR_FULL2={1:"天蓬",2:"天芮",3:"天沖",4:"天輔",5:"天禽",6:"天心",7:"天柱",8:"天任",9:"天英"};
+const DOOR_FIXED2={1:"休門",2:"死門",3:"傷門",4:"杜門",6:"開門",7:"驚門",8:"生門",9:"景門"};
+const GOD_ORDER2=["值符","螣蛇","太陰","六合","勾陳","朱雀","九地","九天"];
+const XUNSHOU_ZHI_TO_YI={0:"戊",10:"己",8:"庚",6:"辛",4:"壬",2:"癸"};
+const DOOR_ELEMENT={"休門":"水","死門":"土","傷門":"木","杜門":"木","開門":"金","驚門":"金","生門":"土","景門":"火"};
+const PALACE_ELEMENT2={1:"水",2:"土",3:"木",4:"木",6:"金",7:"金",8:"土",9:"火"};
+const STAR_ELEMENT={"天蓬":"水","天芮":"土","天沖":"木","天輔":"木","天禽":"土","天心":"金","天柱":"金","天任":"土","天英":"火"};
+function overcomes(a,b){ return (a==="木"&&b==="土")||(a==="土"&&b==="水")||(a==="水"&&b==="火")||(a==="火"&&b==="金")||(a==="金"&&b==="木"); }
+function generates(a,b){ return (a==="木"&&b==="火")||(a==="火"&&b==="土")||(a==="土"&&b==="金")||(a==="金"&&b==="水")||(a==="水"&&b==="木"); }
+function seasonRelation(starEl, seasonEl){
+  if(starEl===seasonEl) return "旺";
+  if(generates(seasonEl,starEl)) return "相";
+  if(generates(starEl,seasonEl)) return "休";
+  if(overcomes(seasonEl,starEl)) return "囚";
+  if(overcomes(starEl,seasonEl)) return "死";
+  return "平";
+}
+function seasonElementFromMonthZhi(monthZhi){
+  if(["寅","卯"].includes(monthZhi)) return "木";
+  if(["巳","午"].includes(monthZhi)) return "火";
+  if(["申","酉"].includes(monthZhi)) return "金";
+  if(["亥","子"].includes(monthZhi)) return "水";
+  return "土"; // 辰戌丑未
+}
+
+function buildChart(isYang, ju, hourGan, hourZhi, method){
+  const order = isYang?YANG_ORDER2:YIN_ORDER2;
+  const startIdx = order.indexOf(ju);
+  const seq = order.slice(startIdx).concat(order.slice(0,startIdx));
+  const jiGong = isYang?2:8;
+
+  // 地盤：每宮各有自己的干（含中五），寄宮只是顯示層處理
+  const diGanRaw={}, ganPalace={};
+  for(let i=0;i<9;i++){ diGanRaw[seq[i]]=LIUYI2[i]; ganPalace[LIUYI2[i]]=seq[i]; }
+
+  const hourGanIdx0=TIANGAN.indexOf(hourGan);
+  const xunZhiIdx=DIZHI2.indexOf(hourZhi);
+  let k=null;
+  for(let kk=0;kk<60;kk++){ if(kk%10===hourGanIdx0 && kk%12===xunZhiIdx){k=kk;break;} }
+  const xunZhiStart=(Math.floor(k/10)*10)%12;
+  const liuyiForHour=XUNSHOU_ZHI_TO_YI[xunZhiStart];
+  const p0raw=ganPalace[liuyiForHour];
+  const p1raw=(hourGan==="甲")?p0raw:ganPalace[hourGan];
+  const eff=p=>(p===5?jiGong:p);
+  const realCycle=order.filter(p=>p!==5);
+  const shift8=(realCycle.indexOf(eff(p1raw))-realCycle.indexOf(eff(p0raw))+8)%8;
+
+  const tian={}, star={}, door={}, god={}, di={};
+  const center={gan:diGanRaw[5], tian:"", star:""};
+
+  if(method==="fly"){
+    // 飛宮法：天盤干、九星（含天禽）按洛書數序飛泊（陽順陰逆），中五宮參與
+    const shift9=(order.indexOf(p1raw)-order.indexOf(p0raw)+9)%9;
+    for(let i=0;i<9;i++){
+      const dest=order[i], src=order[(i-shift9+9)%9];
+      if(dest===5){ center.tian=diGanRaw[src]; center.star=STAR_FULL2[src]; }
+      else { tian[dest]=diGanRaw[src]; star[dest]=STAR_FULL2[src]; }
+    }
+    realCycle.forEach(num=>{ di[num]=diGanRaw[num]; });
+    // 八門僅八宮，沿八宮循環位移
+    for(let i=0;i<8;i++){
+      const destPos=realCycle[i], srcPos=realCycle[(i-shift8+8)%8];
+      door[destPos]=DOOR_FIXED2[srcPos];
+    }
+  } else {
+    // 排宮轉盤法：中五寄宮後，八宮整體轉動
+    const diDisp={};
+    for(let i=0;i<9;i++){
+      const pos=seq[i], t=(pos===5)?jiGong:pos;
+      diDisp[t]=(diDisp[t]||"")+LIUYI2[i];
+    }
+    realCycle.forEach(num=>{ di[num]=diDisp[num]; });
+    for(let i=0;i<8;i++){
+      const destPos=realCycle[i], srcPos=realCycle[(i-shift8+8)%8];
+      tian[destPos]=diDisp[srcPos];
+      star[destPos]=STAR_FIXED2[srcPos];
+      door[destPos]=DOOR_FIXED2[srcPos];
+    }
+  }
+
+  // 八神：值符起時干落宮（寄宮換算），沿八宮順逆排
+  const gStart=realCycle.indexOf(eff(p1raw));
+  const gSeq=realCycle.slice(gStart).concat(realCycle.slice(0,gStart));
+  GOD_ORDER2.forEach((g,i)=>{ god[gSeq[i]]=g; });
+
+  return {di, tian, star, door, god, zhifuGong:eff(p0raw), jiGong, center};
+}
+
+const ZHI_TO_GONG_VOID = {
+  "子":{gong:1,level:1}, "午":{gong:9,level:1}, "卯":{gong:3,level:1}, "酉":{gong:7,level:1},
+  "丑":{gong:8,level:0.5}, "寅":{gong:8,level:0.5}, "辰":{gong:4,level:0.5}, "巳":{gong:4,level:0.5},
+  "未":{gong:2,level:0.5}, "申":{gong:2,level:0.5}, "戌":{gong:6,level:0.5}, "亥":{gong:6,level:0.5},
+};
+
+function computeAutoChart(y,m,d,hour,minute,method){
+  const inputMs = Date.UTC(y,m-1,d,hour,minute) - 8*3600*1000;
+  const term = findEnclosingTerm(inputMs);
+  const dayIdx60 = dayGanZhiIndex(y,m,d);
+  const dayGan=TIANGAN[dayIdx60%10], dayZhi=DIZHI2[dayIdx60%12];
+  const blockStart = dayIdx60-(dayIdx60%5);
+  const symbolZhi = DIZHI2[blockStart%12];
+  let yuanIdx;
+  if(["子","午","卯","酉"].includes(symbolZhi)) yuanIdx=0;
+  else if(["寅","申","巳","亥"].includes(symbolZhi)) yuanIdx=1;
+  else yuanIdx=2;
+  const juInfo = JU_TABLE[term.name];
+  const ju = juInfo.ju[yuanIdx];
+  const zhiIdx = hourZhiIdxOf(hour);
+  const hGanIdx = hourGanIdxOf(dayIdx60%10, zhiIdx);
+  const hourGan = TIANGAN[hGanIdx], hourZhi = DIZHI2[zhiIdx];
+
+  let k=null;
+  for(let kk=0;kk<60;kk++){ if(kk%10===hGanIdx && kk%12===zhiIdx){k=kk;break;} }
+  const xun=Math.floor(k/10)*10, usedStart=xun%12;
+  const kong1=DIZHI2[(usedStart+10)%12], kong2=DIZHI2[(usedStart+11)%12];
+
+  const ym = findYearMonthPillars(inputMs);
+  const seasonEl = seasonElementFromMonthZhi(ym.monthZhi);
+  const chart = buildChart(juInfo.yang, ju, hourGan, hourZhi, method);
+
+  const newPalaces = {};
+  Object.keys(palaceMeta).forEach(numStr=>{
+    const num = Number(numStr);
+    const meta = palaceMeta[num];
+    const tianRaw = chart.tian[num]; // 轉盤法可能為多字（中五寄宮疊字）
+    const tianFirst = tianRaw[0]; // 取第一字判斷格局／五行，疊字僅供顯示
+    const doorName = chart.door[num];
+    const starName = chart.star[num];
+    const starStat = seasonRelation(STAR_ELEMENT[starName], seasonEl);
+    const patterns = [];
+    if(tianFirst==="乙" && num===2) patterns.push("三奇入墓");
+    if(tianFirst==="丙" && num===6) patterns.push("三奇入墓");
+    if(tianFirst==="丁" && num===8) patterns.push("三奇入墓");
+    if(overcomes(DOOR_ELEMENT[doorName], PALACE_ELEMENT2[num])) patterns.push("門迫");
+    let voidLevel = 0;
+    [kong1,kong2].forEach(zhi=>{
+      const info = ZHI_TO_GONG_VOID[zhi];
+      if(info && info.gong===num) voidLevel = Math.max(voidLevel, info.level);
+    });
+    newPalaces[num] = {
+      name:meta.name, dir:meta.dir, trigram:meta.trigram,
+      tian: tianRaw, di: chart.di[num],
+      door: doorName,
+      doorLuck: ["開門","生門","休門"].includes(doorName)?"吉":(doorName==="景門"?"平":"凶"),
+      star: starName, starStat,
+      god: chart.god[num],
+      sha: [], patterns, voidLevel,
+    };
+  });
+
+  const centerInfo = (method==="fly")
+    ? {big:`${chart.center.tian}／${chart.center.gan}`, small:`中宮 ${chart.center.star}（天／地盤干）`}
+    : {big:chart.center.gan, small:`中宮寄${palaceMeta[chart.jiGong].name}宮`};
+
+  return {
+    newPalaces,
+    centerInfo,
+    label: `${y}年${m}月${d}日 ${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`,
+    ganzhiText: `${ym.yearGan}${ym.yearZhi}年 ${ym.monthGan}${ym.monthZhi}月 ${dayGan}${dayZhi}日 ${hourGan}${hourZhi}時`,
+    juText: `${juInfo.yang?"陽":"陰"}遁${ju}局`,
+    termText: term.name,
+    voidText: `${kong1}、${kong2}（對應：${[kong1,kong2].map(z=>palaceMeta[ZHI_TO_GONG_VOID[z].gong].name+"宮").join("、")}）`,
+  };
+}
+
+let currentAutoMethod = "rotate"; // "rotate" 轉盤 | "fly" 飛盤
+const METHOD_LABEL = {rotate:"排宮轉盤法", fly:"飛宮法"};
+
+function loadAuto(){
+  const input = document.getElementById("autoDateTime").value; // "YYYY-MM-DDTHH:MM"
+  if(!input){ document.getElementById("autoResultNote").textContent = "請先選擇日期時間。"; return; }
+  const [datePart, timePart] = input.split("T");
+  const [y,m,d] = datePart.split("-").map(Number);
+  const [hour,minute] = timePart.split(":").map(Number);
+
+  const result = computeAutoChart(y,m,d,hour,minute,currentAutoMethod);
+  palaces = result.newPalaces;
+  centerInfo = result.centerInfo;
+  document.getElementById("chartSubtitle").textContent = `${result.label} — ${METHOD_LABEL[currentAutoMethod]}自動排盤，依問題類型顯示各宮加減分依據`;
+  document.getElementById("chartMeta").innerHTML =
+    `干支：<b>${result.ganzhiText}</b><br>節氣：<b>${result.termText}</b>　局數：<b>${result.juText}</b>　排法：<b>${METHOD_LABEL[currentAutoMethod]}</b><br>時孤：<b>${result.voidText}</b>`;
+  document.getElementById("voidBanner").innerHTML =
+    `⚠ 此時辰「時孤」空亡地支：<b>${result.voidText}</b>，落入時孤的方位在任何問題類型下都直接降級，不因門星再吉而豁免。`;
+  document.getElementById("autoResultNote").innerHTML =
+    `已排出：${result.ganzhiText}，${result.juText}。星旺衰依季節五行生剋簡化計算；三奇入墓／門迫已自動偵測，其餘罕見格局本工具未涵蓋。`;
+  selectedPalace = null;
+  render();
+}
+/* ================= 自動排盤引擎結束 ================= */
+
+function render(){
+  buildTabs();
+  buildGrid();
+  buildRank();
+  buildDetail();
+}
+
+/* ---------------- 模式切換 ---------------- */
+const modeAutoRotateBtn = document.getElementById("modeAutoRotate");
+const modeAutoFlyBtn = document.getElementById("modeAutoFly");
+const modeManualBtn = document.getElementById("modeManual");
+const manualPanel = document.getElementById("manualPanel");
+const autoPanel = document.getElementById("autoPanel");
+const allModeBtns = [modeAutoRotateBtn, modeAutoFlyBtn, modeManualBtn];
+
+function hideAllPanels(){ manualPanel.style.display="none"; autoPanel.style.display="none"; }
+
+function activateAutoMode(method){
+  allModeBtns.forEach(b=>b.classList.remove("active"));
+  (method==="fly"?modeAutoFlyBtn:modeAutoRotateBtn).classList.add("active");
+  hideAllPanels();
+  autoPanel.style.display = "block";
+  currentAutoMethod = method;
+  document.getElementById("autoHint").textContent =
+    (method==="fly")
+      ? "採用「飛宮法」，請把它當作一種可信、但非唯一標準答案的排盤結果。"
+      : "採用「排宮轉盤法」，請把它當作一種可信、但非唯一標準答案的排盤結果。";
+  if(document.getElementById("autoDateTime").value) loadAuto();
+}
+
+modeAutoRotateBtn.onclick = ()=>activateAutoMode("rotate");
+modeAutoFlyBtn.onclick = ()=>activateAutoMode("fly");
+modeManualBtn.onclick = ()=>{
+  allModeBtns.forEach(b=>b.classList.remove("active"));
+  modeManualBtn.classList.add("active");
+  hideAllPanels();
+  manualPanel.style.display = "block";
+  buildManualTable();
+};
+document.getElementById("applyManual").onclick = applyManualForm;
+document.getElementById("applyAuto").onclick = loadAuto;
+
+/* ---------------- 初始載入：以當下時間自動排盤（轉盤法） ---------------- */
+(function init(){
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,"0");
+  document.getElementById("autoDateTime").value =
+    `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  loadAuto();
+})();
+</script>
+</body>
+</html>
