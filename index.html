@@ -296,6 +296,24 @@
   }
   .center-cell .small{font-size:10.5px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;}
 
+  /* ---------- 窄螢幕（手機直放）：解除正方形限制，格子依內容自適應 ---------- */
+  @media (max-width:640px){
+    .compass-frame{padding:12px;}
+    .grid9{aspect-ratio:auto;grid-template-rows:auto auto auto;}
+    .cell{min-height:150px;padding:8px 7px 6px;}
+    .cell .dir{font-size:12px;margin-bottom:4px;}
+    .cell .ganline{font-size:10.5px;}
+    .cell .door{font-size:12px;}
+    .cell .star{font-size:11px;}
+    .cell .god{font-size:10.5px;}
+    .cell .patterns{font-size:9.5px;}
+    .cell.void::after,.cell.void-partial::after{font-size:8.5px;top:4px;right:5px;}
+    .badge{font-size:9.5px;padding:2px 7px;margin-top:8px;letter-spacing:0;}
+    .trigram-wm{font-size:44px;}
+    .center-cell .big{font-size:22px;}
+    .center-cell .small{font-size:9px;}
+  }
+
   /* ---------- side panel ---------- */
   .side{display:flex;flex-direction:column;gap:16px;}
   .panel{
