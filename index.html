@@ -359,6 +359,16 @@
   .legend{font-size:11px;color:var(--muted);line-height:1.9;}
   .legend b{color:var(--ivory);font-weight:500;}
 
+  .scent-block{margin-top:14px;padding:12px 12px 10px;background:rgba(111,165,131,.05);border:1px dashed rgba(111,165,131,.35);border-radius:4px;font-size:12px;line-height:1.9;color:var(--ivory);}
+  .scent-title{font-family:'Noto Serif TC',serif;color:var(--jade);font-weight:700;margin-bottom:6px;}
+  .blend-type{display:inline-block;background:rgba(111,165,131,.15);color:var(--jade);border:1px solid rgba(111,165,131,.4);border-radius:3px;padding:0 6px;font-size:11px;margin-right:4px;}
+  .scent-block details{margin-top:6px;color:var(--muted);font-size:11px;line-height:1.7;}
+  .scent-block summary{cursor:pointer;color:var(--brass-dim);}
+  .scent-safety{margin-top:8px;padding-top:6px;border-top:1px dotted var(--line);font-size:10.5px;color:var(--muted);line-height:1.6;}
+  .blend-box{margin-top:8px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:rgba(255,255,255,.02);}
+  .blend-head{color:var(--brass);font-weight:700;margin-bottom:2px;font-size:12px;}
+  .blend-herb{color:var(--jade);font-size:11.5px;margin-top:3px;}
+
   footer{
     margin-top:32px;
     padding-top:18px;
@@ -419,7 +429,7 @@
     </div>
     <table class="manual-table">
       <thead>
-        <tr><th>宮位</th><th>天盤干</th><th>地盤干</th><th>八門</th><th>九星</th><th>星旺衰</th><th>八神</th><th>三奇入墓</th><th>門迫</th><th>有煞氣</th><th>時孤</th></tr>
+        <tr><th>宮位</th><th>天盤干</th><th>地盤干</th><th>八門</th><th>九星</th><th>星旺衰</th><th>八神</th><th>三奇入墓</th><th>門迫</th><th>有煞氣</th><th>馬星</th><th>時孤</th></tr>
       </thead>
       <tbody id="manualTbody"></tbody>
     </table>
@@ -524,6 +534,7 @@ function buildManualTable(){
       <td><input type="checkbox" class="f-rumu" ${p.patterns.includes("三奇入墓")?"checked":""}></td>
       <td><input type="checkbox" class="f-menpo" ${p.patterns.includes("門迫")?"checked":""}></td>
       <td><input type="checkbox" class="f-sha" ${p.sha.length?"checked":""}></td>
+      <td><input type="checkbox" class="f-ma" ${p.ma?"checked":""}></td>
       <td>
         <select class="f-void">
           <option value="0" ${p.voidLevel===0?"selected":""}>無</option>
@@ -556,6 +567,7 @@ function applyManualForm(){
       starStat: tr.querySelector(".f-starstat").value,
       god: tr.querySelector(".f-god").value,
       sha, patterns,
+      ma: tr.querySelector(".f-ma").checked,
       voidLevel: Number(tr.querySelector(".f-void").value),
     };
   });
@@ -578,48 +590,56 @@ function applyManualForm(){
 const categories = {
   travel:{
     label:"出行搬遷", sub:"TRAVEL",
+    maPts:15, accent:"木",
     doorScore:{"開門":30,"生門":30,"休門":30,"景門":5,"死門":-30,"驚門":-30,"杜門":-30,"傷門":-30},
     godScore:{"六合":10,"太陰":10,"九天":10,"值符":10,"九地":5,"勾陳":-10,"朱雀":-10,"螣蛇":-15},
     note:"出行、搬遷同看休生開三吉門（第一層），時孤與重大凶格直接否決；星神旺衰只作第二層加減，不推翻第一層結論。"
   },
   negotiation:{
     label:"談判合作", sub:"NEGOTIATION",
+    maPts:0, accent:"火",
     doorScore:{"景門":30,"開門":15,"休門":10,"生門":10,"死門":-25,"驚門":-20,"杜門":-20,"傷門":-15},
     godScore:{"六合":20,"值符":15,"太陰":5,"九天":5,"九地":0,"勾陳":-15,"朱雀":-15,"螣蛇":-10},
     note:"談判重視「景門」(文書契約)與「六合」(和合中介)，值符代表主導力；勾陳、朱雀主拖延與口舌是非，扣分較重。"
   },
   find:{
     label:"尋人尋物", sub:"FIND",
+    maPts:10, accent:"水",
     doorScore:{"生門":35,"開門":10,"休門":15,"景門":5,"死門":-15,"驚門":-15,"杜門":-10,"傷門":-15},
     godScore:{"值符":15,"太陰":15,"九地":10,"六合":5,"九天":5,"勾陳":-5,"朱雀":-10,"螣蛇":-10},
     note:"尋人尋物以「生門」(有蹤跡)與「值符」(關鍵線索)為主；太陰、九地主隱蔽潛伏，是判斷「找得到但要花心思」的重要參考。"
   },
   wealth:{
     label:"財運投資", sub:"WEALTH",
+    maPts:0, accent:"金",
     doorScore:{"生門":25,"開門":20,"休門":10,"景門":10,"死門":-20,"驚門":-15,"杜門":-15,"傷門":-10},
     godScore:{"六合":15,"值符":10,"九天":5,"太陰":5,"九地":0,"勾陳":-10,"朱雀":-10,"螣蛇":-10},
     note:"財運看「生門、開門」主財氣流動，「六合」主人脈合作帶來的財；星的旺相衰死影響財氣是否穩固持久。"
   },
   marriage:{
     label:"婚姻感情", sub:"MARRIAGE",
+    maPts:-5, accent:"火",
     doorScore:{"休門":20,"生門":15,"開門":10,"景門":10,"死門":-25,"驚門":-20,"杜門":-15,"傷門":-20},
     godScore:{"六合":25,"太陰":10,"值符":10,"九地":5,"九天":0,"勾陳":-15,"朱雀":-15,"螣蛇":-15},
     note:"感情首重「六合」(姻緣和合之神)，休門主安穩、景門主喜慶；朱雀主口角、螣蛇主猜疑糾纏、勾陳主拖泥帶水，皆是感情大忌。"
   },
   exam:{
     label:"考試求職", sub:"EXAM / JOB",
+    maPts:0, accent:"火",
     doorScore:{"景門":30,"開門":25,"休門":10,"生門":10,"死門":-20,"驚門":-20,"杜門":-15,"傷門":-15},
     godScore:{"值符":15,"九天":15,"太陰":10,"六合":5,"九地":-5,"勾陳":-10,"朱雀":-5,"螣蛇":-10},
     note:"考試看「景門」(文書考場)，求職見貴看「開門」；九天主高升揚名，值符主貴人提攜；九地主沉伏，對求上進之事略減分。"
   },
   lawsuit:{
     label:"訴訟官司", sub:"LAWSUIT",
+    maPts:0, accent:"金",
     doorScore:{"開門":20,"休門":15,"景門":5,"生門":10,"死門":-20,"驚門":-25,"杜門":-10,"傷門":-20},
     godScore:{"值符":15,"六合":15,"太陰":5,"九地":5,"九天":0,"勾陳":-20,"朱雀":-20,"螣蛇":-10},
     note:"官司看「開門」(見官順利)與「六合」(和解可能)；驚門主驚恐官非、勾陳主牽連拖延、朱雀主口舌文書是非，此三者扣分最重。"
   },
   illness:{
     label:"疾病健康", sub:"HEALTH",
+    maPts:0, accent:null,
     doorScore:{"生門":30,"休門":20,"開門":10,"景門":0,"死門":-30,"驚門":-15,"杜門":-10,"傷門":-20},
     godScore:{"六合":10,"值符":10,"太陰":5,"九天":5,"九地":-5,"勾陳":-10,"朱雀":-5,"螣蛇":-15},
     note:"問病首重「生門」(生機)與「休門」(休養)，死門、傷門大忌；螣蛇主纏綿怪症、九地主病深沉伏。傳統另以天芮為病星，天芮所落之宮亦可參看病情性質。"
@@ -720,6 +740,91 @@ function getKeYing(p){
   return SHIGAN_KEYING[key] || null;
 }
 
+/* ---------------- 五行調香資料庫（依香砌學堂目錄全品項自訂歸類＋自備藥香六支；現代五行芳療參考設計，非古法） ---------------- */
+const ELEM_MOTHER={"木":"水","火":"木","土":"火","金":"土","水":"金"};
+const ELEM_CHILD={"木":"火","火":"土","土":"金","金":"水","水":"木"};
+const PALACE_ORGAN={1:"腎・泌尿・耳",2:"腹・脾胃",3:"肝・足",4:"膽・股・氣機",6:"頭・骨・大腸",7:"肺・口齒",8:"脾胃・手",9:"心・眼目"};
+const OIL_DB={
+  "木":{trait:"清新舒展・疏理氣機",
+    featured:["佛手柑","甜橙","桉油醇迷迭香","月桂","羅馬洋甘菊"],
+    herbal:["荊芥","當歸","川芎"],
+    all:["佛手柑","甜橙","檸檬","粉紅葡萄柚","萊姆","紅柑","苦橙果","苦橙葉","檸檬馬鞭草","檸檬香茅","香茅","山雞椒","甜羅勒","快樂鼠尾草","月桂","桉油醇迷迭香","馬鞭草酮迷迭香","甜馬鬱蘭","羅馬洋甘菊","摩洛哥洋甘菊","香附"]},
+  "火":{trait:"溫暖明亮・振奮心神",
+    featured:["依蘭","玫瑰天竺葵","橙花","純正薰衣草","錫蘭肉桂"],
+    herbal:["連翹（清熱，宜用於平洩方）"],
+    all:["依蘭","大花茉莉原精","玫瑰原精","大馬士革玫瑰","3%大馬士革玫瑰","橙花","3%橙花","玫瑰天竺葵","大根老鸛草","玫瑰草","菩提花","永久花","聖約翰草","錫蘭肉桂","丁香花苞","黑胡椒","薑","肉豆蔻","純正薰衣草","原生高地薰衣草","醒目薰衣草"]},
+  "土":{trait:"沉穩厚實・安定中土",
+    featured:["廣藿香","岩蘭草","乳香","甜茴香","安息香"],
+    herbal:["陳皮"],
+    all:["廣藿香","岩蘭草","乳香","沒藥","紅沒藥","安息香","岩玫瑰","古巴香脂","荳蔻","甜茴香","芫荽籽","胡蘿蔔籽","薑黃","穗甘松","歐白芷根"]},
+  "金":{trait:"清透潔淨・肅降理肺",
+    featured:["澳洲尤加利","茶樹","絲柏","羅文莎葉","黑雲杉"],
+    herbal:["辛夷"],
+    all:["澳洲尤加利","藍膠尤加利","檸檬尤加利","史密斯尤加利","茶樹","桉油醇綠花白千層","橙花叔醇綠花白千層","羅文莎葉","穗花薰衣草","沈香醇百里香","百里酚百里香","野馬鬱蘭","鼠尾草","絲柏","銀冷杉","黑雲杉","歐洲赤松","胡椒薄荷","綠薄荷"]},
+  "水":{trait:"深靜悠遠・涵養腎水",
+    featured:["大西洋雪松","澳洲檀香","杜松漿果","台灣紅檜","德國洋甘菊"],
+    herbal:[],
+    all:["大西洋雪松","維吉尼亞雪松","喜瑪拉雅雪松","澳洲檀香","東印度檀香","杜松漿果","高地杜松","台灣紅檜","黃檜","芳樟","花梨木","德國洋甘菊","西洋蓍草","芹菜籽","纈草","芳香白珠樹"]},
+};
+const SAFETY_NOTE="僅供擴香聞香；勿口服、勿原液接觸皮膚；孕婦、嬰幼兒、氣喘者及有貓家庭請先確認個別精油安全性。五行歸類為現代五行芳療之自訂參考（藥香類依中藥歸經），非古法、非療效宣稱、非醫療建議，身體不適請就醫。";
+
+function scentAdvice(elem, starStat){
+  const weak=["休","囚","死"].includes(starStat);
+  const strong=["旺","相"].includes(starStat);
+  if(strong){
+    const child=ELEM_CHILD[elem];
+    return {type:"平洩方", desc:`${elem}氣旺相，以其所生之「${child}」行洩其有餘、順勢疏導`,
+      main:{elem:child, drops:3}, sub:{elem:elem, drops:2}};
+  }
+  if(weak){
+    const mother=ELEM_MOTHER[elem];
+    return {type:"補益方", desc:`${elem}氣處「${starStat}」偏弱，以本行為主、母行「${mother}」相生為輔`,
+      main:{elem:elem, drops:3}, sub:{elem:mother, drops:2}};
+  }
+  return {type:"調和方", desc:`${elem}氣平和，以本行為主微調即可`,
+    main:{elem:elem, drops:3}, sub:{elem:ELEM_MOTHER[elem], drops:1}};
+}
+
+function renderBlend(adv, accent){
+  const box=(title,elem,drops)=>{
+    const db=OIL_DB[elem];
+    const herb=db.herbal.length?`<div class="blend-herb">藥香：${db.herbal.join("、")}</div>`:"";
+    return `<div class="blend-box"><div class="blend-head">${title}　${elem}行 ${drops} 滴 — ${db.trait}</div><div>${db.featured.join("、")}</div>${herb}</div>`;
+  };
+  let html=`<div class="blend"><span class="blend-type">${adv.type}</span>${adv.desc}`;
+  html+=box("主調",adv.main.elem,adv.main.drops);
+  html+=box("輔調",adv.sub.elem,adv.sub.drops);
+  if(accent) html+=box("事類點綴",accent,1);
+  html+=`</div>`;
+  return html;
+}
+
+function scentHTML(palaceNum, starStat, accent, title){
+  const elem=PALACE_ELEMENT2[palaceNum];
+  if(!elem) return "";
+  const adv=scentAdvice(elem, starStat);
+  const t = title || `五行調香參考（此宮屬${elem}・星況「${starStat}」）`;
+  return `<div class="scent-block"><div class="scent-title">🌿 ${t}</div>${renderBlend(adv, accent)}<div class="scent-safety">${SAFETY_NOTE}</div></div>`;
+}
+
+/* ---------------- 六儀擊刑與馬星 ---------------- */
+const GAN_ELEMENT={"甲":"木","乙":"木","丙":"火","丁":"火","戊":"土","己":"土","庚":"金","辛":"金","壬":"水","癸":"水"};
+const JIXING_MAP={"戊":3,"己":2,"庚":8,"辛":9,"壬":4,"癸":4}; // 天盤六儀落此宮成刑
+const PALACE_NAME_TO_NUM={"坎":1,"坤":2,"震":3,"巽":4,"乾":6,"兌":7,"艮":8,"離":9};
+const MA_ZHI_GONG={"申":8,"子":8,"辰":8,"寅":2,"午":2,"戌":2,"巳":6,"酉":6,"丑":6,"亥":4,"卯":4,"未":4}; // 時支→驛馬落宮
+
+function getJiXing(p){
+  const num = PALACE_NAME_TO_NUM[p.name];
+  if(!num || !p.tian) return null;
+  const g = p.tian[0];
+  if(JIXING_MAP[g] !== num) return null;
+  const ge = GAN_ELEMENT[g], pe = PALACE_ELEMENT2[num];
+  if(!ge || !pe) return null;
+  if(ge===pe) return {pts:-25, forced:true, relText:"宮干比和，刑勢如常"};
+  if(generates(ge,pe)||generates(pe,ge)) return {pts:-15, forced:false, relText:"宮干相生，刑勢稍緩"};
+  return {pts:-35, forced:true, relText:"宮干相剋，刑勢加重"};
+}
+
 function scorePalace(p, cat){
   const lines = [];
   let total = 0;
@@ -745,6 +850,22 @@ function scorePalace(p, cat){
       total -= 30; forcedBad = true;
     }
   });
+
+  // 六儀擊刑（宮干生剋調節僅用於擊刑）
+  const jx = getJiXing(p);
+  if(jx){
+    lines.push({reason:`六儀擊刑：天盤${p.tian[0]}落${p.name}宮成刑，${jx.relText}`, pts:jx.pts});
+    total += jx.pts;
+    if(jx.forced) forcedBad = true;
+  }
+
+  // 馬星（主動主變，依問題類型給分）
+  if(p.ma){
+    const mpts = cat.maPts ?? 0;
+    lines.push({reason: mpts>0 ? "馬星臨宮（主動主變）：此類事利於行動變動"
+      : (mpts<0 ? "馬星臨宮（主動主變）：此類事求穩忌變，動象反扣" : "馬星臨宮（主動主變）：此類事不特別加減"), pts:mpts});
+    total += mpts;
+  }
 
   // 十干剋應（天盤干疊地盤干，81格查表）
   const ky = getKeYing(p);
@@ -831,6 +952,9 @@ function buildGrid(){
     const ky = getKeYing(p);
     const patternBits = [...p.patterns, ...p.sha].map(t=>`<span class="txt-凶">${t}</span>`);
     if(ky) patternBits.unshift(`<span class="txt-${ky[1]==="吉"?"吉":(ky[1]==="中"?"平":"凶")}">${ky[0]}</span>`);
+    const jxCell = getJiXing(p);
+    if(jxCell) patternBits.push(`<span class="txt-凶">擊刑</span>`);
+    if(p.ma) patternBits.push(`<span class="txt-平">馬星</span>`);
     cell.innerHTML = `
       <div class="trigram-wm">${p.trigram}</div>
       <div class="dir">${p.name} · ${p.dir}</div>
@@ -872,6 +996,25 @@ function buildRank(){
   noteEl.style.cssText = "margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.7;";
   noteEl.textContent = categories[currentCat].note;
   rankEl.appendChild(noteEl);
+
+  // 疾病健康分頁：天芮（病星）落宮調香參考
+  if(currentCat==="illness"){
+    const div=document.createElement("div");
+    div.className="scent-block";
+    const tianRuiNum = Object.keys(palaces).map(Number).find(n=>palaces[n].star==="天芮");
+    if(tianRuiNum){
+      const p=palaces[tianRuiNum];
+      const elem=PALACE_ELEMENT2[tianRuiNum];
+      const adv=scentAdvice(elem, p.starStat);
+      div.innerHTML=`<div class="scent-title">🌿 本盤問病主方（天芮落宮）</div>
+        天芮（病星）落<b>${p.name}宮・${p.dir}</b>，傳統象意對應部位：<b>${PALACE_ORGAN[tianRuiNum]}</b>；宮屬<b>${elem}</b>，星況「${p.starStat}」。
+        ${renderBlend(adv, null)}
+        <div class="scent-safety">${SAFETY_NOTE}</div>`;
+    } else {
+      div.innerHTML=`<div class="scent-title">🌿 本盤問病主方（天芮落宮）</div>此盤天芮未落八宮（飛宮法時可能入中宮），可改點選任一宮位參看該宮氣機調香（輔參）。<div class="scent-safety">${SAFETY_NOTE}</div>`;
+    }
+    rankEl.appendChild(div);
+  }
 }
 
 function buildDetail(){
@@ -893,6 +1036,7 @@ function buildDetail(){
       </div>
     `).join("")}
     <div class="total-line"><span>總分</span><span class="${result.total>=0?'pos':'neg'}" style="color:${result.total>=0?'var(--jade)':'var(--cinnabar)'}">${result.total>0?'+':''}${result.total}</span></div>
+    ${scentHTML(selectedPalace, p.starStat, categories[currentCat].accent||null, currentCat==="illness" ? `此宮氣機調香（輔參・宮屬${PALACE_ELEMENT2[selectedPalace]||""}・星況「${p.starStat}」）` : null)}
   `;
 }
 
@@ -1072,6 +1216,7 @@ function computeAutoChart(y,m,d,hour,minute,method){
   const ym = findYearMonthPillars(inputMs);
   const seasonEl = seasonElementFromMonthZhi(ym.monthZhi);
   const chart = buildChart(juInfo.yang, ju, hourGan, hourZhi, method);
+  const maGong = MA_ZHI_GONG[hourZhi] || null;
 
   const newPalaces = {};
   Object.keys(palaceMeta).forEach(numStr=>{
@@ -1099,7 +1244,7 @@ function computeAutoChart(y,m,d,hour,minute,method){
       doorLuck: ["開門","生門","休門"].includes(doorName)?"吉":(doorName==="景門"?"平":"凶"),
       star: starName, starStat,
       god: chart.god[num],
-      sha: [], patterns, voidLevel,
+      sha: [], patterns, voidLevel, ma: num===maGong,
     };
   });
 
@@ -1137,7 +1282,7 @@ function loadAuto(){
   document.getElementById("voidBanner").innerHTML =
     `⚠ 此時辰「時孤」空亡地支：<b>${result.voidText}</b>，落入時孤的方位在任何問題類型下都直接降級，不因門星再吉而豁免。`;
   document.getElementById("autoResultNote").innerHTML =
-    `已排出：${result.ganzhiText}，${result.juText}。星旺衰依季節五行生剋簡化計算；三奇入墓／門迫／十干剋應81格已自動偵測，其餘格局（擊刑、各類遁格等）未涵蓋。`;
+    `已排出：${result.ganzhiText}，${result.juText}。星旺衰依季節五行生剋簡化計算；三奇入墓／門迫／擊刑／十干剋應81格已自動偵測。`;
   selectedPalace = null;
   render();
 }
