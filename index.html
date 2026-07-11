@@ -422,9 +422,22 @@
   <div class="manual-panel" id="autoPanel">
     <div class="manual-hint" id="autoHint">採用「排宮轉盤法」，請把它當作一種可信、但非唯一標準答案的排盤結果。</div>
     <div class="manual-row">
-      <label>日期時間（請輸入當地時間，預設視為 UTC+8）</label>
+      <label>日期時間（請輸入當地時間，依裝置時區）</label>
       <input type="datetime-local" id="autoDateTime">
     </div>
+    <div class="manual-row">
+      <label><input type="checkbox" id="tstOn" checked style="width:15px;height:15px;vertical-align:-2px;"> 以真太陽時定時辰（古人日晷所量之時）</label>
+    </div>
+    <div class="manual-row">
+      <label>地理經度 °E（西經為負）</label>
+      <input type="text" id="tstLon" value="121.5" style="max-width:110px;">
+      <button type="button" class="mode-btn" id="tstGeo" style="padding:6px 14px;">使用裝置定位</button>
+      <span id="tstGeoHint" style="font-size:11.5px;color:var(--jade);"></span>
+    </div>
+    <div class="manual-row">
+      <label><input type="checkbox" id="lateZiToday" style="width:15px;height:15px;vertical-align:-2px;"> 夜子時歸當日（夜子時派；預設 23:00 起算翌日）</label>
+    </div>
+    <div id="tstInfo" style="margin:6px 0 12px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2;color:var(--muted);border-left:2px solid var(--brass-dim);padding-left:12px;"></div>
     <button class="apply-btn" id="applyAuto">自動排盤 →</button>
     <div id="autoResultNote" style="margin-top:14px;font-size:12px;color:var(--muted);line-height:1.8;"></div>
   </div>
@@ -1216,10 +1229,47 @@ const ZHI_TO_GONG_VOID = {
   "未":{gong:2,level:0.5}, "申":{gong:2,level:0.5}, "戌":{gong:6,level:0.5}, "亥":{gong:6,level:0.5},
 };
 
-function computeAutoChart(y,m,d,hour,minute,method){
-  const inputMs = Date.UTC(y,m-1,d,hour,minute) - 8*3600*1000;
+// 均時差（分鐘）— Meeus《Astronomical Algorithms》28.3 低精度式，此用途秒級精度已足
+function equationOfTime(jd){
+  const T=(jd-2451545)/36525;
+  const L0=((280.46646+36000.76983*T+0.0003032*T*T)%360+360)%360;
+  const M=(357.52911+35999.05029*T-0.0001537*T*T)*Math.PI/180;
+  const e=0.016708634-0.000042037*T-0.0000001267*T*T;
+  const eps=(23.439291-0.0130042*T)*Math.PI/180;
+  const yy=Math.tan(eps/2)**2;
+  const L0r=L0*Math.PI/180;
+  const E = yy*Math.sin(2*L0r) - 2*e*Math.sin(M) + 4*e*yy*Math.sin(M)*Math.cos(2*L0r)
+          - 0.5*yy*yy*Math.sin(4*L0r) - 1.25*e*e*Math.sin(2*M);
+  return E*4*180/Math.PI;
+}
+function shiftDate(y,m,d,days){
+  const dt=new Date(Date.UTC(y,m-1,d)); dt.setUTCDate(dt.getUTCDate()+days);
+  return [dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate()];
+}
+
+function computeAutoChart(y,m,d,hour,minute,method,opts){
+  opts = opts || {tst:false, lon:120, tzOffHours:8, lateZiToday:false};
+  const tz = opts.tzOffHours;
+  const inputMs = Date.UTC(y,m-1,d,hour,minute) - tz*3600*1000; // 物理時刻（節氣、年月柱依此）
   const term = findEnclosingTerm(inputMs);
-  const dayIdx60 = dayGanZhiIndex(y,m,d);
+
+  // ── 真太陽時：只重新定義「當地讀數」，不改變物理時刻 ──
+  let trueMin = hour*60+minute, lonCorr=0, eotMin=0, dayShift=0;
+  if(opts.tst){
+    const jd = 2440587.5 + inputMs/86400000;
+    lonCorr = (opts.lon - tz*15)*4;
+    eotMin = equationOfTime(jd);
+    trueMin = hour*60+minute + lonCorr + eotMin;
+    if(trueMin<0){trueMin+=1440;dayShift=-1;}
+    else if(trueMin>=1440){trueMin-=1440;dayShift=1;}
+  }
+  let [effY,effM,effD] = dayShift!==0 ? shiftDate(y,m,d,dayShift) : [y,m,d];
+  const tHour=Math.floor(trueMin/60), tMin=Math.floor(trueMin%60);
+
+  // ── 日柱換日：真太陽時 ≥23:00 即屬翌日（夜子時派則否）──
+  const ziNextDay = (tHour>=23 && !opts.lateZiToday);
+  const [dayY,dayM,dayD] = ziNextDay ? shiftDate(effY,effM,effD,1) : [effY,effM,effD];
+  const dayIdx60 = dayGanZhiIndex(dayY,dayM,dayD);
   const dayGan=TIANGAN[dayIdx60%10], dayZhi=DIZHI2[dayIdx60%12];
   const blockStart = dayIdx60-(dayIdx60%5);
   const symbolZhi = DIZHI2[blockStart%12];
@@ -1229,7 +1279,7 @@ function computeAutoChart(y,m,d,hour,minute,method){
   else yuanIdx=2;
   const juInfo = JU_TABLE[term.name];
   const ju = juInfo.ju[yuanIdx];
-  const zhiIdx = hourZhiIdxOf(hour);
+  const zhiIdx = Math.floor((((trueMin/60)+1)%24)/2);
   const hGanIdx = hourGanIdxOf(dayIdx60%10, zhiIdx);
   const hourGan = TIANGAN[hGanIdx], hourZhi = DIZHI2[zhiIdx];
 
@@ -1285,6 +1335,14 @@ function computeAutoChart(y,m,d,hour,minute,method){
     juText: `${juInfo.yang?"陽":"陰"}遁${ju}局`,
     termText: term.name,
     voidText: `${kong1}、${kong2}（對應：${[kong1,kong2].map(z=>palaceMeta[ZHI_TO_GONG_VOID[z].gong].name+"宮").join("、")}）`,
+    tst: opts.tst ? {
+      stdText: `${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`,
+      lonCorr, eotMin,
+      trueText: `${String(tHour).padStart(2,"0")}:${String(tMin).padStart(2,"0")}`,
+      branch: hourZhi,
+      ziNote: (tHour>=23||tHour<1) ? (opts.lateZiToday?"子時歸當日（夜子時派）":"子時歸次日") : "",
+      dayShift,
+    } : null,
   };
 }
 
@@ -1298,7 +1356,29 @@ function loadAuto(){
   const [y,m,d] = datePart.split("-").map(Number);
   const [hour,minute] = timePart.split(":").map(Number);
 
-  const result = computeAutoChart(y,m,d,hour,minute,currentAutoMethod);
+  const tzOffHours = -(new Date(y, m-1, d, hour, minute).getTimezoneOffset())/60;
+  const opts = {
+    tst: document.getElementById("tstOn").checked,
+    lon: parseFloat(document.getElementById("tstLon").value) || tzOffHours*15,
+    tzOffHours,
+    lateZiToday: document.getElementById("lateZiToday").checked,
+  };
+  const result = computeAutoChart(y,m,d,hour,minute,currentAutoMethod,opts);
+
+  const tzName=(typeof Intl!=="undefined"&&Intl.DateTimeFormat)?Intl.DateTimeFormat().resolvedOptions().timeZone:"裝置時區";
+  const fmtSgn=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(1);
+  const tstInfoEl = document.getElementById("tstInfo");
+  if(result.tst){
+    const t=result.tst;
+    tstInfoEl.innerHTML =
+      `裝置時區 ${tzName}（UTC${tzOffHours>=0?"+":""}${tzOffHours}，中央經線 ${tzOffHours*15}°）<br>`+
+      `標準時 <b style="color:var(--ivory)">${t.stdText}</b>　經度差 ${fmtSgn(t.lonCorr)} 分　均時差 ${fmtSgn(t.eotMin)} 分<br>`+
+      `→ 真太陽時 <b style="color:var(--brass)">${t.trueText}</b> → <b style="color:var(--brass)">${t.branch}時</b>`+
+      (t.ziNote?`　<span style="color:var(--jade)">${t.ziNote}</span>`:"")+
+      (t.dayShift!==0?`　<span style="color:var(--cinnabar)">（校正後跨日，曆日${t.dayShift>0?"進":"退"}一日）</span>`:"");
+  } else {
+    tstInfoEl.innerHTML = `未啟用真太陽時，逕以裝置標準時定時辰；23:00 ${opts.lateZiToday?"不換日（夜子時派）":"起算翌日日柱"}。`;
+  }
   palaces = result.newPalaces;
   centerInfo = result.centerInfo;
   document.getElementById("chartSubtitle").textContent = `${result.label} — ${METHOD_LABEL[currentAutoMethod]}自動排盤，依問題類型顯示各宮加減分依據`;
@@ -1354,6 +1434,20 @@ modeManualBtn.onclick = ()=>{
 };
 document.getElementById("applyManual").onclick = applyManualForm;
 document.getElementById("applyAuto").onclick = loadAuto;
+["tstOn","lateZiToday"].forEach(id=>{
+  document.getElementById(id).addEventListener("change", ()=>{ if(document.getElementById("autoDateTime").value) loadAuto(); });
+});
+document.getElementById("tstLon").addEventListener("change", ()=>{ if(document.getElementById("autoDateTime").value) loadAuto(); });
+document.getElementById("tstGeo").onclick = ()=>{
+  const hint=document.getElementById("tstGeoHint");
+  if(!navigator.geolocation){ hint.textContent="此裝置不支援定位"; return; }
+  hint.textContent="定位中…";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    document.getElementById("tstLon").value = pos.coords.longitude.toFixed(2);
+    hint.textContent = `✓ 已取得裝置經度 ${pos.coords.longitude.toFixed(2)}°`;
+    if(document.getElementById("autoDateTime").value) loadAuto();
+  }, err=>{ hint.textContent = "定位失敗，請手動輸入經度"; }, {timeout:8000});
+};
 
 /* ---------------- 初始載入：以當下時間自動排盤（轉盤法） ---------------- */
 (function init(){
